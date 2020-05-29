@@ -32,10 +32,28 @@ def get_frac_time_away(df):
 
     return frac_time_away
 
+def process_targets(df, start_date='2020-03-23', end_date='2020-05-03'):
+    df = df.loc[df['date_range_start'] >= start_date].copy()
+    df = df.loc[df['date_range_start'] <= end_date].copy()
+    get_frac_devices_home(df)
+    get_frac_devices_work(df)
+    frac_time_away = get_frac_time_away(df)
+    df['fraction_time_away_all'] = frac_time_away/(1440*df['device_count'])
+    df['fraction_time_away_leave'] = frac_time_away/(1440*(df['device_count'] - df['completely_home_device_count']))
+    df['Week'] = pd.to_datetime(df['date_range_start'], utc=True).dt.week
+    df_weekly = df.groupby(['origin_census_block_group', 'Week'])[
+                            ['device_count',
+                             'fraction_of_devices_home',
+                             'fraction_of_devices_work',
+                             'fraction_time_away_all',
+                             'fraction_time_away_leave']].mean().reset_index()
+    df_weekly.rename(columns={"origin_census_block_group": "geo_12"}, inplace=True)
 
-def process_targets(df):
-    df = df.loc[df['date_range_start'] >= '2020-03-23'].copy()
-    df = df.loc[df['date_range_start'] <= '2020-05-03'].copy()
+    return (df, df_weekly)
+
+def process_targets2(df, start_date='2019-03-23', end_date='2019-05-03'):
+    df = df.loc[df['date_range_start'] >= start_date].copy()
+    df = df.loc[df['date_range_start'] <= end_date].copy()
     get_frac_devices_home(df)
     get_frac_devices_work(df)
     frac_time_away = get_frac_time_away(df)
