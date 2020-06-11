@@ -1,5 +1,6 @@
 import pandas as pd
 import geopandas as gpd
+import logging
 
 from shapely.geometry import Point, Polygon
 from shapely import wkt
@@ -98,7 +99,7 @@ def create_places_features(coreplaces_filepath, patterns_filepath, output_filepa
 if __name__ == "__main__":
 	logging.info("Creating places features csv")
 
-	create_places_features('../data/raw/coreplaces_filtered_chicago.csv',
-						   '../data/raw/weekly_patterns_fitered.csv',
-						   '../data/places_features.csv', 10)
+	create_places_features('../../data/raw/coreplaces_filtered_chicago.csv',
+						   '../../data/raw/weekly_patterns_fitered.csv',
+						   '../../data/places_features.csv', 10)
 

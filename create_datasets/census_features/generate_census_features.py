@@ -68,4 +68,4 @@ filtered = cm.rename_and_filter(percents)
 
 filtered["geo_12"] = filtered["GEO_ID"].map(lambda x: str(x)[-12:])
 filtered.loc[filtered['Median_Income'] < 0, 'Median_Income'] = 'NA'
-filtered.to_csv('census_processed.csv',index=False)
+filtered.to_csv('../../data/census_processed.csv',index=False)
